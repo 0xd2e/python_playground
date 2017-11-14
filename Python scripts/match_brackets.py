@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-def match_brackets(text):
+def check_brackets_match(text):
     """
     Checks, whether brackets in the given string are in correct sequence.
     Any opening bracket should have closing bracket of the same type.
@@ -8,8 +8,6 @@ def match_brackets(text):
 
     Returns true if bracket sequence is correct, false otherwise.
     """
-
-    # http://www.codeabbey.com/index/task_view/matching-brackets
 
     assert isinstance(text, str)
 
