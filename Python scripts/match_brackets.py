@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+
 def check_brackets_match(text):
     """
     Checks, whether brackets in the given string are in correct sequence.
@@ -27,3 +28,19 @@ def check_brackets_match(text):
             stack_length -= 1
 
     return not (stack_length or bracket_stack)
+
+
+def check_brackets_number(text):
+    """
+    This function only checks if the number of opening brackets matches
+    the number of closing brackets of the same type.
+
+    Returns true if the number of opening and closing brackets of each type
+    is the same, false otherwise.
+    """
+
+    assert isinstance(text, str)
+
+    brackets = [text.count(op) == text.count(cl) for op, cl in zip('([{<', ')]}>')]
+
+    return all(brackets)
