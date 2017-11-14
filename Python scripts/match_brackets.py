@@ -28,6 +28,4 @@ def match_brackets(text):
                 return False
             stack_length -= 1
 
-    if stack_length or bracket_stack:
-        return False
-    return True
+    return not (stack_length or bracket_stack)
