@@ -5,104 +5,69 @@
 
 from os import path
 from re import findall
-from sys import argv
 
-import requests
 from PIL import Image
 
+from supp import download_file
 
-try:
 
-    url = 'http://www.pythonchallenge.com/pc/def/oxygen.png'
-    req = requests.get(url, stream=True, timeout=4)
+def solve07():
 
-    req.raise_for_status()
+    filepath = download_file(url='http://www.pythonchallenge.com/pc/def/oxygen.png')
 
-    print('Successfully download:', url)
+    filename = path.split(filepath)[1]
 
-    filename = url[url.rindex('/') + 1:]
-    filepath = path.dirname(argv[0])
-    filepath = path.abspath(filepath)
-    filepath = path.join(filepath, filename)
+    try:
 
-    with open(filepath, 'wb') as f:
-        f.write(req.content)
+        with Image.open(filepath, 'r') as img:
 
-    print('File saved:', filepath)
+            width, height = img.size
 
-except requests.exceptions.MissingSchema as err:
-    print('Wrong URL format:', url)
-    print('Probably missing protocol name (e.g. http, ftp)')
+            template = (
+                '{:<8}: {}'.format('Filename', filename),
+                '{:<8}: {}'.format('Format', img.format),
+                '{:<8}: {}'.format('Mode', img.mode),
+                '{:<8}: {:d} pixels'.format('Width', width),
+                '{:<8}: {:d} pixels'.format('Height', height),
+                '{:<8}: {:,d} pixels'.format('Size', width * height),
+                '{:<8}: {}'.format('Metadata', img.info)
+            )
 
-except requests.exceptions.Timeout as err:
-    print('Cannot download:', url)
-    print('Connection timeout')
+            # This values were checked manually in an image editor
+            left, top, right, bottom = 0, 43, 608, 52
+            length = 7
 
-except (requests.exceptions.ConnectionError,
-        requests.exceptions.HTTPError) as err:
-    print('Cannot download:', url)
-    print('Status code:', req.status_code)
+            width = right - left
+            height = bottom - top
 
-except (IOError, OSError) as err:
-    if err.strerror:
-        print(err.strerror)
+            # Keep only the gray rectangles
+            pixels = img.crop((left, top, right, bottom)).getdata()
+
+            # Keep only one color channel
+            pixels = [px[0] for px in pixels]
+
+    except (IOError, OSError) as err:
+        if not path.exists(filepath):
+            print('File does not exist:', filepath)
+        else:
+            print('Cannot open:', filepath)
+            print(err.strerror if err.strerror else err)
+
     else:
-        print('Cannot save:', filepath)
 
-except BaseException as err:
-    print('Unexpected error:', err)
+        print('\n'.join(template), end='\n\n')
 
-else:
-    req.close()
-    del url, req, requests, argv
+        del template, left, top, right, bottom, img
+
+        ans = [chr(pixels[i]) for i in range(1, width, length)]
+        ans = ''.join(ans)
+        print('Secret message:', ans)
+
+        ans = findall(r'\d+', ans)
+        ans = [chr(int(i)) for i in ans]
+        ans = ''.join(ans)
+        print('Magic word:', ans)
 
 
-try:
-
-    with Image.open(filepath, 'r') as img:
-
-        width, height = img.size
-
-        print()
-        print('Filename: ', filename)
-        print('Format:   ', img.format)
-        print('Size:      {} x {} pixels ({:,d} total)'.format(width, height, width * height))
-        print('Mode:     ', img.mode)
-        print('Metadata: ', img.info)
-        print()
-
-        # This values were checked manually in an image editor
-        left, top, right, bottom = 0, 43, 608, 52
-        length = 7
-
-        width = right - left
-        height = bottom - top
-
-        # Keep only the gray rectangles
-        pixels = img.crop((left, top, right, bottom)).getdata()
-
-        # Keep only one color channel
-        pixels = [px[0] for px in pixels]
-
-except (IOError, OSError) as err:
-    if not path.exists(filename):
-        print('File does not exist:', filepath)
-    elif err.strerror:
-        print(err.strerror)
-    else:
-        print('Cannot open:', filepath)
-
-except BaseException as err:
-    print(err)
-
-else:
-    ans = []
-
-    [ans.append(chr(pixels[i])) for i in range(1, width, length)]
-
-    ans = ''.join(ans)
-    print('Secret message:', ans)
-
-    ans = findall(r'\d+', ans)
-    ans = [chr(int(i)) for i in ans]
-    print('Magic word:', "".join(ans))
+if __name__ == '__main__':
+    solve07()
