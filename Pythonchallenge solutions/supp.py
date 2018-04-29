@@ -22,8 +22,8 @@ def prepare_file_path(filename, extension, dirpath=''):
     -- points to the directory where the script is located
        if empty string is given (default) or the given
        directory does not exist (invalid path)
-    -- use getcwd function from os library to point to the
-       current working directory
+    -- use string with a single dot or getcwd function from os library
+       to point to the current working directory
 
 
     Returns a string representing an absolute path to the file.
@@ -45,21 +45,21 @@ def prepare_file_path(filename, extension, dirpath=''):
     return filepath
 
 
-def download_file(url, filepath='', binf=True, username='', password=''):
+def download_file(url, binf, filepath='', username='', password=''):
     '''
     Inputs:
 
     url -- string, link to a file
 
-    filepath
-    -- string, download locaion
-    -- path to a file or directory
-    -- empty string (default) will infer file name from the URL and save
-       the file to the directory where the script is located
-
     binf
     -- boolean, file type indicator
     -- binary file is expected if True (default), text file if False
+
+    filepath
+    -- string, download locaion
+    -- path to a file or directory
+    -- if an empty string is given (default), file name will be infered from
+       the URL and saved the file to the directory where the script is located
 
     username, password
     -- strings, authentication information (credentials)
