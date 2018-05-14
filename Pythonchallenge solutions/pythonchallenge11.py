@@ -12,13 +12,14 @@ import matplotlib.pyplot as plt
 
 from PIL import Image, ImageOps
 
-from supp import download_file
+from utils import download_file
 
 
 def solve11():
 
     filepath = download_file(
         url='http://www.pythonchallenge.com/pc/return/cave.jpg',
+        binf=True,
         username='huge',
         password='file'
     )
@@ -26,6 +27,8 @@ def solve11():
     filename = path.split(filepath)[1]
 
     try:
+
+        assert path.exists(filepath), '[not downloaded]'
 
         with Image.open(filepath, 'r') as img:
 
@@ -42,12 +45,12 @@ def solve11():
 
             pixels = np.asarray(img, dtype=np.uint8, order='F')
 
-    except (IOError, OSError) as err:
+    except (IOError, OSError, AssertionError) as err:
         if not path.exists(filepath):
-            print('File does not exist:', filepath)
+            print('File does not exist:', filepath if filepath else err, end='\n\n')
         else:
             print('Cannot open:', filepath)
-            print(err.strerror if err.strerror else err)
+            print(err.strerror if err.strerror else err, end='\n\n')
 
     else:
 
@@ -87,7 +90,7 @@ def solve11():
 
         plt.show()
 
-    print('Magic word: evil')
+        print('Magic word: evil')
 
 
 if __name__ == '__main__':

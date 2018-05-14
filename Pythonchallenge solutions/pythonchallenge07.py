@@ -8,16 +8,18 @@ from re import findall
 
 from PIL import Image
 
-from supp import download_file
+from utils import download_file
 
 
 def solve07():
 
-    filepath = download_file(url='http://www.pythonchallenge.com/pc/def/oxygen.png')
+    filepath = download_file(url='http://www.pythonchallenge.com/pc/def/oxygen.png', binf=True)
 
     filename = path.split(filepath)[1]
 
     try:
+
+        assert path.exists(filepath), '[not downloaded]'
 
         with Image.open(filepath, 'r') as img:
 
@@ -46,9 +48,9 @@ def solve07():
             # Keep only one color channel
             pixels = [px[0] for px in pixels]
 
-    except (IOError, OSError) as err:
+    except (IOError, OSError, AssertionError) as err:
         if not path.exists(filepath):
-            print('File does not exist:', filepath)
+            print('File does not exist:', filepath if filepath else err)
         else:
             print('Cannot open:', filepath)
             print(err.strerror if err.strerror else err)

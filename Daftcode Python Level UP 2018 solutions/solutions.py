@@ -1,10 +1,10 @@
 import numpy as np
 
-from supp import download_file
+from utils import download_file
 from zadanie1.task1 import count_characters
 from zadanie2.task2 import primesfrom2to, approximate_prime
 from zadanie34.task34_prep import process_text, load_data
-from zadanie34.task34_supp import show_short_info
+from zadanie34.task34_utils import show_short_info
 from zadanie34.task34 import simple_bottom_up
 
 

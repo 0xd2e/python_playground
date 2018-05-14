@@ -5,7 +5,7 @@ import numpy as np
 from numba import jit
 
 from zadanie34.binary_genetic_algorithm import run
-from zadanie34.task34_supp import count_lvl_nodes
+from zadanie34.task34_utils import count_lvl_nodes
 
 
 # Terms that are used interchangeably: level/row, path/route, triangle/pyramid.

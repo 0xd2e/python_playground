@@ -2,7 +2,7 @@ from timeit import default_timer
 
 import numpy as np
 
-from zadanie34.task34_supp import fabricate_data, count_lvl_nodes
+from zadanie34.task34_utils import fabricate_data, count_lvl_nodes
 
 
 def prep_test_cases(nlvls):

@@ -97,14 +97,14 @@ def download_file(url, binf, filepath='', username='', password=''):
 
     except exceptions.Timeout:
         print('Cannot get:', url)
-        print('Connection timeout')
+        print('Connection timeout', end='\n\n')
 
     except (exceptions.ConnectionError, exceptions.HTTPError) as err:
-        print(err)
+        print(err, end='\n\n')
 
     except (IOError, OSError) as err:
         print('Cannot save:', filepath)
-        print(err.strerror if err.strerror else err)
+        print(err.strerror if err.strerror else err, end='\n\n')
 
     else:
         response.close()

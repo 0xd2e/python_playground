@@ -7,40 +7,33 @@ from collections import Counter
 from os import path
 from sys import argv
 
-import requests
-
+from requests import get, exceptions
 from bs4 import BeautifulSoup, Comment
 
 
 try:
 
     url = 'http://www.pythonchallenge.com/pc/def/ocr.html'
-    req = requests.get(url, timeout=3)
+    req = get(url, timeout=3)
 
     req.raise_for_status()
 
     print('Successfully get:', url)
 
-except requests.exceptions.MissingSchema as err:
-    print('Wrong URL format:', url)
-    print('Probably missing protocol name (e.g. http, ftp)')
-
-except requests.exceptions.Timeout as err:
+except exceptions.Timeout:
     print('Cannot get:', url)
     print('Connection timeout')
 
-except (requests.exceptions.ConnectionError,
-        requests.exceptions.HTTPError) as err:
-    print('Cannot get:', url)
-    print('Status code:', req.status_code)
+except (exceptions.ConnectionError, exceptions.HTTPError) as err:
+    print(err)
 
 except BaseException as err:
     print('Unexpected error:', err)
 
 else:
+    req.close()
     req.encoding = 'ISO-8859-1'
     soup = BeautifulSoup(req.text, 'html.parser')
-    req.close()
 
 
 try:
@@ -59,18 +52,14 @@ try:
     print('File saved:', filepath)
 
 except (IOError, OSError) as err:
-    if err.strerror:
-        print(err.strerror)
-    else:
-        print('Cannot save:', filepath)
+    print('Cannot save:', filepath)
+    print(err.strerror if err.strerror else err)
 
 except BaseException as err:
     print('Unexpected error:', err)
 
 
 char_freq = Counter()
-rare_chars = []
-ans = []
 
 
 try:
@@ -81,24 +70,23 @@ try:
         [char_freq.update(line) for line in f]
 
         # Find rare characters
-        [rare_chars.append(char[0]) for char in char_freq.items() if char[1] < 50]
+        rare_chars = ''.join(char for char, freq in char_freq.items() if freq < 10)
 
         # Set file pointer back to the beginning of the file
         f.seek(0, 0)
 
         # List rare characters in order of occurrences
-        [ans.append(char) for line in f for char in line if char in rare_chars]
+        ans = ''.join(char for line in f for char in line if char in rare_chars)
 
 except (IOError, OSError) as err:
     if not path.exists(filename):
         print('File does not exist:', filepath)
-    elif err.strerror:
-        print(err.strerror)
     else:
-        print('Cannot open:', filepath)
+        print('Cannot save:', filepath)
+        print(err.strerror if err.strerror else err)
 
 except BaseException as err:
-    print(err)
+    print('Unexpected error:', err)
 
 else:
-    print('Magic word:', ''.join(ans))
+    print('Magic word:', ans)
