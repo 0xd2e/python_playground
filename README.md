@@ -14,10 +14,6 @@ A collection of miscellaneous Python scripts.
 
 Generic place to share small code samples.
 
-### **Web scraping**
-
-Scripts to get and save data from web pages.
-
 ### **Daftcode Python Level UP 2018 solutions**
 
 Solutions to [Daftcode](https://daftcode.pl/) [Python Level UP 2018](https://github.com/daftcode/python_levelup_2018/tree/master/zadania_rekrutacyjne) course preliminary tasks.
