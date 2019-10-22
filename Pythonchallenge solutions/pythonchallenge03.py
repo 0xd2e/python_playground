@@ -80,7 +80,7 @@ try:
 
     with open(filepath, mode='rt', buffering=1) as f:
 
-        [ans.extend(regexp.findall(line)) for line in f]
+        [ans.extend(regexp.findall(line)) for line in f]  # pylint: disable=W0106
 
 except (IOError, OSError) as err:
     if not path.exists(filename):

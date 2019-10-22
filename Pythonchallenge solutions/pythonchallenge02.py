@@ -67,7 +67,7 @@ try:
     with open(filepath, mode='rt', buffering=1) as f:
 
         # Count character occurrences
-        [char_freq.update(line) for line in f]
+        [char_freq.update(line) for line in f]  # pylint: disable=W0106
 
         # Find rare characters
         rare_chars = ''.join(char for char, freq in char_freq.items() if freq < 10)

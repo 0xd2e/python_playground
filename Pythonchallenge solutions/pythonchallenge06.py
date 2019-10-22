@@ -103,11 +103,8 @@ try:
 
         while True:
 
-            try:
-                comments.append(archive.getinfo(filename).comment.decode(encoding))
-                filename = archive.read(filename).decode(encoding).split()[-1]
-            except:
-                break
+            comments.append(archive.getinfo(filename).comment.decode(encoding))
+            filename = archive.read(filename).decode(encoding).split()[-1]
 
             if filename.isdigit():
                 filename += extension
@@ -129,4 +126,4 @@ except BaseException as err:
     print(err)
 
 else:
-    [print(char, sep='', end='') for char in comments]
+    [print(char, sep='', end='') for char in comments]  # pylint: disable=W0106
