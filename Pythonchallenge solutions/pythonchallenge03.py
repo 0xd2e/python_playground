@@ -6,7 +6,6 @@
 import re
 
 from os import path
-from sys import argv
 
 import requests
 
@@ -47,7 +46,7 @@ else:
 try:
 
     filename = 'letter.txt'
-    filepath = path.dirname(argv[0])
+    filepath = path.dirname(__file__)
     filepath = path.abspath(filepath)
     filepath = path.join(filepath, filename)
 

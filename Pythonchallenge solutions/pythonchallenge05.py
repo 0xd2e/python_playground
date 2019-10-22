@@ -6,7 +6,6 @@
 import pickle
 
 from os import path
-from sys import argv
 
 import requests
 
@@ -21,7 +20,7 @@ try:
     print('Successfully download:', url)
 
     filename = url[url.rindex('/') + 1:]
-    filepath = path.dirname(argv[0])
+    filepath = path.dirname(__file__)
     filepath = path.abspath(filepath)
     filepath = path.join(filepath, filename)
 

@@ -5,7 +5,6 @@
 
 from collections import Counter
 from os import path
-from sys import argv
 
 from requests import get, exceptions
 from bs4 import BeautifulSoup, Comment
@@ -39,7 +38,7 @@ else:
 try:
 
     filename = 'mess.txt'
-    filepath = path.dirname(argv[0])
+    filepath = path.dirname(__file__)
     filepath = path.abspath(filepath)
     filepath = path.join(filepath, filename)
 
