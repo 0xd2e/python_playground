@@ -28,7 +28,8 @@ def solve11():
 
     try:
 
-        assert path.exists(filepath), '[not downloaded]'
+        if not path.exists(filepath):
+            raise IOError('File does not exist')
 
         with Image.open(filepath, 'r') as img:
 
@@ -45,12 +46,9 @@ def solve11():
 
             pixels = np.asarray(img, dtype=np.uint8, order='F')
 
-    except (IOError, OSError, AssertionError) as err:
-        if not path.exists(filepath):
-            print('File does not exist:', filepath if filepath else err, end='\n\n')
-        else:
-            print('Cannot open:', filepath)
-            print(err.strerror if err.strerror else err, end='\n\n')
+    except (IOError, OSError) as err:
+        print('Cannot open:', filepath if filepath else '[not downloaded]')
+        print(err.strerror if err.strerror else err)
 
     else:
 

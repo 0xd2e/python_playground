@@ -19,7 +19,8 @@ def solve07():
 
     try:
 
-        assert path.exists(filepath), '[not downloaded]'
+        if not path.exists(filepath):
+            raise IOError('File does not exist')
 
         with Image.open(filepath, 'r') as img:
 
@@ -48,12 +49,9 @@ def solve07():
             # Keep only one color channel
             pixels = [px[0] for px in pixels]
 
-    except (IOError, OSError, AssertionError) as err:
-        if not path.exists(filepath):
-            print('File does not exist:', filepath if filepath else err)
-        else:
-            print('Cannot open:', filepath)
-            print(err.strerror if err.strerror else err)
+    except (IOError, OSError) as err:
+        print('Cannot open:', filepath if filepath else '[not downloaded]')
+        print(err.strerror if err.strerror else err)
 
     else:
 
