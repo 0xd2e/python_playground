@@ -15,7 +15,7 @@ def solve07():
 
     filepath = download_file(url='http://www.pythonchallenge.com/pc/def/oxygen.png', binf=True)
 
-    filename = path.split(filepath)[1]
+    filename = path.basename(filepath)
 
     try:
 
@@ -47,7 +47,10 @@ def solve07():
             pixels = img.crop((left, top, right, bottom)).getdata()
 
             # Keep only one color channel
-            pixels = [px[0] for px in pixels]
+            nums = [px[0] for px in pixels]
+
+            # Keep only one number for each rectangle
+            nums = nums[1:width:length]
 
     except (IOError, OSError) as err:
         print('Cannot open:', filepath if filepath else '[not downloaded]')
@@ -57,15 +60,15 @@ def solve07():
 
         print('\n'.join(template), end='\n\n')
 
-        del template, left, top, right, bottom, img
+        del template, left, top, right, bottom, length, width, height, pixels, img
 
-        ans = [chr(pixels[i]) for i in range(1, width, length)]
-        ans = ''.join(ans)
+        text_parts = [chr(n) for n in nums]
+        ans = ''.join(text_parts)
         print('Secret message:', ans)
 
-        ans = findall(r'\d+', ans)
-        ans = [chr(int(i)) for i in ans]
-        ans = ''.join(ans)
+        text_parts = findall(r'\d+', ans)
+        text_parts = [chr(int(i)) for i in text_parts]
+        ans = ''.join(text_parts)
         print('Magic word:', ans)
 
 
