@@ -2,6 +2,7 @@
 
 
 from os import path
+from pathlib import Path as PyPath
 
 from requests import get, exceptions
 
@@ -118,3 +119,62 @@ def download_file(url, binf, filepath='', username='', password=''):
         return filepath
 
     return ''
+
+
+def clean_dir(dir_path=''):
+    '''
+    Input:
+
+    dir_path
+    -- string, path to a directory
+    -- points to the directory where the script is located
+       if empty string is given (default)
+    -- use string with a single dot or getcwd function from os library
+       to point to the current working directory
+
+
+    Delete all files from the given directory that are not python scripts.
+
+    This function does not return any value.
+    '''
+
+    if not dir_path:
+        dir_path = path.dirname(__file__)
+
+    dir_path = path.abspath(dir_path)
+
+    try:
+
+        if not path.isdir(dir_path):
+            raise IOError('Directory does not exist: {}'.format(dir_path))
+
+        files_to_remove = [
+            item for item in PyPath(dir_path).iterdir()
+            if item.is_file() and item.suffix != '.py'
+        ]
+
+        if not files_to_remove:
+            print('No files to remove in {}'.format(dir_path))
+            return
+
+        message = '\n'.join((
+            '{:n} file(s) will be deleted'.format(len(files_to_remove)),
+            'from {}'.format(dir_path),
+            '\n'.join('- {}'.format(f.name) for f in files_to_remove)
+        ))
+
+        print(message)
+
+        permission = input('Do you want to continue (y/n)? ')
+        permission = permission.strip().lower()
+
+        if permission in ('y', 'yes'):
+            for f in files_to_remove:
+                f.unlink()
+
+    except (IOError, OSError) as err:
+        print(err.strerror if err.strerror else err)
+
+
+if __name__ == '__main__':
+    clean_dir()
